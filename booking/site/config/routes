@@ -5,5 +5,5 @@
 /robots.txt RobotsR GET
 
 /              HomeR    GET POST
-/game/#GameId GameR    GET
+/game/#GameId  GameR    GET
 /bookings      BookingR POST

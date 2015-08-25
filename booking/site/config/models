@@ -11,6 +11,7 @@ Email
 Game
     name Text
     description Text
+    UniqueName name
 Timeslot
     day Day
     time TimeOfDay

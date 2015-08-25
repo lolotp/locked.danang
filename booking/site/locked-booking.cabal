@@ -93,6 +93,19 @@ executable         locked-booking
 
     ghc-options:       -threaded -O2 -rtsopts -with-rtsopts=-N
 
+executable         Seed 
+    if flag(library-only)
+        Buildable: False
+
+    main-is:           Seed.hs
+    hs-source-dirs:    test
+    build-depends:     base
+                     , locked-booking
+                     , monad-logger
+                     , persistent
+                     , persistent-postgresql
+                     , time
+
 test-suite test
     type:              exitcode-stdio-1.0
     main-is:           Spec.hs

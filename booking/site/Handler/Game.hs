@@ -8,6 +8,9 @@ getGameR :: GameId -> Handler Html
 getGameR gameId = do
     Just game <- runDB $ do
         get gameId
+    timeslots <- runDB $ do
+        selectList [TimeslotGame ==. gameId] []
+
     (formWidget, formEnctype) <- generateFormPost sampleForm
     defaultLayout $ do
         setTitle "Locked Danang"

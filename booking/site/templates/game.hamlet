@@ -1,1 +1,3 @@
-<h1>##{gameName game}
+<h1>#{gameName game}
+
+<p>#{length timeslots}
