@@ -9,10 +9,6 @@ insertGame :: MonadIO m => (Text, Text) -> ReaderT SqlBackend m ()
 insertGame (name, description) =
     insert_ $ Game name description 
 
-insertTimeslot :: MonadIO m => GameId -> (Day, TimeOfDay) -> ReaderT SqlBackend m ()
-insertTimeslot gameId (day, time) =
-    insert_ $ Timeslot day time gameId
-
 games :: [(Text, Text)]
 games =
     [ ("Saw",     "Lưỡi cưa tử thần")
@@ -24,9 +20,11 @@ main = do
     settings <- loadAppSettingsArgs [configSettingsYmlValue] useEnv
     let conn = (pgConnStr $ appDatabaseConf settings)
     runStderrLoggingT . withPostgresqlConn conn $ runSqlConn $ do
-      runMigration migrateAll
-      --deleteWhere ([] :: [Filter Game])
-      --mapM_ insertGame games
-      let Right gameKey = keyFromValues [PersistInt64 1]
-      mapM_ (insertTimeslot gameKey) $ timeslots (fromGregorian 2015 8 23) 3
+        runMigration migrateAll
+        --deleteWhere ([] :: [Filter Game])
+        mapM_ insertGame games
+        games <- selectList ([] :: [Filter Game]) []
+        mapM_ 
+            (\game -> mapM_ (insertTimeslot (entityKey game)) $ timeslots (fromGregorian 2015 8 23) 3) 
+            games
 

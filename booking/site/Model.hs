@@ -20,3 +20,7 @@ timeslots startDate numWeeks =
   let dayList = map (\numDays -> addDays (toInteger numDays) startDate) [0..numWeeks*7-1] in
   [(day, time) | day <- dayList, time <- timeslotsPerDay]
 
+insertTimeslot :: MonadIO m => GameId -> (Day, TimeOfDay) -> ReaderT SqlBackend m ()
+insertTimeslot gameId (day, time) =
+    insert_ $ Timeslot day time gameId
+
