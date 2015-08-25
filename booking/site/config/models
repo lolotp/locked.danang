@@ -8,5 +8,16 @@ Email
     user UserId Maybe
     verkey Text Maybe
     UniqueEmail email
+Game
+    name Text
+    description Text
+Timeslot
+    day Day
+    time TimeOfDay
+    game GameId
+Booking
+    email Text
+    phone Int
+    timeslot TimeslotId
 
  -- By default this file is used in Model.hs (which is imported by Foundation.hs)
