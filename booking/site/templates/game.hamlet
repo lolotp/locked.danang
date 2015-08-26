@@ -6,19 +6,11 @@
 <p>#{length timeslots}
 <table>
   <thead>
-    <th>Monday
-    <th>Tuesday
-    <th>Wednesday
-    <th>Thursday
-    <th>Friday
-    <th>Saturday
-    <th>Sunday
+  $forall day <- days
+    $with (year, month, date) <- toGregorian day
+      <th>#{weekDateName day} on #{date}/#{month}/#{year}
   <tbody>
+  $forall perDaySlot <- timeslotsPerDay
     <tr>
-      <td>09:00
-      <td>09:00
-      <td>09:00
-      <td>09:00
-      <td>09:00
-      <td>09:00
-      <td>09:00
+    $forall day <- days
+      <td>#{todHour perDaySlot}:#{todMin perDaySlot}

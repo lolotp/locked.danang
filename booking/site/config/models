@@ -19,6 +19,9 @@ Timeslot
 Booking
     email Text
     phone Int
-    timeslot TimeslotId
+    numberOfPeople Int
+    day Day
+    time TimeOfDay
+    UniqueTimeslot day time
 
  -- By default this file is used in Model.hs (which is imported by Foundation.hs)

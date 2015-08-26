@@ -21,7 +21,7 @@ main = do
     let conn = (pgConnStr $ appDatabaseConf settings)
     runStderrLoggingT . withPostgresqlConn conn $ runSqlConn $ do
         runMigration migrateAll
-        --deleteWhere ([] :: [Filter Game])
+        deleteWhere ([] :: [Filter Game])
         mapM_ insertGame games
         games <- selectList ([] :: [Filter Game]) []
         mapM_ 
