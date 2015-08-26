@@ -3,30 +3,29 @@ module Handler.Game where
 import Import
 import Yesod.Form.Bootstrap3 (BootstrapFormLayout (..), renderBootstrap3,
                               withSmallInput)
+import Data.FileEmbed (embedFile)
+import Data.Time.LocalTime
+
+vietnamTimezone :: TimeZone
+vietnamTimezone = TimeZone 420 False ""
+
+vietnamCurrentTime :: IO LocalTime
+vietnamCurrentTime =
+    getCurrentTime >>= return . (utcToLocalTime vietnamTimezone)
 
 getGameR :: GameId -> Handler Html
 getGameR gameId = do
+    currentTime <- liftIO vietnamCurrentTime
     Just game <- runDB $ do
         get gameId
     timeslots <- runDB $ do
-        selectList [TimeslotGame ==. gameId] []
+        selectList [TimeslotGame ==. gameId, TimeslotDay >=. localDay currentTime] []
 
-    (formWidget, formEnctype) <- generateFormPost sampleForm
     defaultLayout $ do
-        setTitle "Locked Danang"
+        setTitle $ toHtml $ gameName game
         $(widgetFile "game")
 
-postBookingR :: Handler Html
-postBookingR = do
-    (formWidget, formEnctype) <- generateFormPost sampleForm
-    let submission = Nothing :: Maybe (FileInfo, Text)
-        handlerName = "getHomeR" :: Text
-    defaultLayout $ do
-        aDomId <- newIdent
-        setTitle "Welcome To Yesod!"
-        $(widgetFile "homepage")
+postBookingR :: Handler TypedContent
+postBookingR = return $ TypedContent typePlain
+                    $ toContent $(embedFile "config/robots.txt")
 
-sampleForm :: Form (FileInfo, Text)
-sampleForm = renderBootstrap3 BootstrapBasicForm $ (,)
-    <$> fileAFormReq "Choose a file"
-    <*> areq textField (withSmallInput "What's on the file?") Nothing

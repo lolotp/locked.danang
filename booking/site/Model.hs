@@ -15,8 +15,8 @@ share [mkPersist sqlSettings, mkMigrate "migrateAll"]
 timeslotsPerDay :: [TimeOfDay]
 timeslotsPerDay = map (\hour -> TimeOfDay hour 0 0) [9..21]
 
-timeslots :: Day -> Int -> [(Day, TimeOfDay)]
-timeslots startDate numWeeks = 
+timeslotsFromDay :: Day -> Int -> [(Day, TimeOfDay)]
+timeslotsFromDay startDate numWeeks = 
   let dayList = map (\numDays -> addDays (toInteger numDays) startDate) [0..numWeeks*7-1] in
   [(day, time) | day <- dayList, time <- timeslotsPerDay]
 

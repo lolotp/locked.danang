@@ -1,3 +1,24 @@
 <h1>#{gameName game}
 
+<p>#{show currentTime}
+
+<p>#{gameDescription game}
 <p>#{length timeslots}
+<table>
+  <thead>
+    <th>Monday
+    <th>Tuesday
+    <th>Wednesday
+    <th>Thursday
+    <th>Friday
+    <th>Saturday
+    <th>Sunday
+  <tbody>
+    <tr>
+      <td>09:00
+      <td>09:00
+      <td>09:00
+      <td>09:00
+      <td>09:00
+      <td>09:00
+      <td>09:00

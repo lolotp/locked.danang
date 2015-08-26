@@ -25,6 +25,6 @@ main = do
         mapM_ insertGame games
         games <- selectList ([] :: [Filter Game]) []
         mapM_ 
-            (\game -> mapM_ (insertTimeslot (entityKey game)) $ timeslots (fromGregorian 2015 8 23) 3) 
+            (\game -> mapM_ (insertTimeslot (entityKey game)) $ timeslotsFromDay (fromGregorian 2015 8 23) 3) 
             games
 
