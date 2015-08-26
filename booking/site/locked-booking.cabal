@@ -82,6 +82,7 @@ library
                  , containers
                  , vector
                  , time
+                 , foreign-store                 >= 0.1
 
 executable         locked-booking
     if flag(library-only)
