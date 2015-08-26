@@ -3,14 +3,29 @@
 <p>#{show currentTime}
 
 <p>#{gameDescription game}
-<p>#{length timeslots}
+
 <table>
   <thead>
-  $forall day <- days
+  $forall day <- take 7 days
     $with (year, month, date) <- toGregorian day
       <th>#{weekDateName day} on #{date}/#{month}/#{year}
   <tbody>
   $forall perDaySlot <- timeslotsPerDay
     <tr>
-    $forall day <- days
-      <td>#{todHour perDaySlot}:#{todMin perDaySlot}
+    $forall _ <- take 7 days
+      <td><a href="javascript:void(0)" data-toggle="modal" data-target="#myModal">#{formatTime defaultTimeLocale "%I:%M %p" perDaySlot}
+
+<div class="modal fade" id="myModal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            &times;
+          <h4 class="modal-title">
+            Modal Header
+      <div class="modal-body">
+        <p>Some text in the modal.
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">
+            Close
+      

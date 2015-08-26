@@ -31,10 +31,11 @@ getGameR gameId = do
     currentTime <- liftIO vietnamCurrentTime
     Just game <- runDB $ do
         get gameId
-    let timeslots = timeslotsFromDay (localDay currentTime) 3
     let days = map (\num -> addDays num (localDay currentTime)) [0..20]
 
     defaultLayout $ do
+        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+        addScriptRemote "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
         setTitle $ toHtml $ gameName game
         $(widgetFile "game")
 
