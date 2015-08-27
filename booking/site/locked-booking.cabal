@@ -84,6 +84,7 @@ library
                  , time
                  , foreign-store                 >= 0.1
                  , lifted-base
+                 , esqueleto
 
 executable         locked-booking
     if flag(library-only)

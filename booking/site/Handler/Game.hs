@@ -11,6 +11,9 @@ import Data.Time.Calendar
 import Data.Time.Calendar.WeekDate
 
 import qualified Data.Text as T
+import qualified Data.Map  as DM
+import qualified Database.Esqueleto      as E
+import           Database.Esqueleto      ((^.),(?.))
 
 vietnamTimezone :: TimeZone
 vietnamTimezone = TimeZone 420 False ""
@@ -32,12 +35,34 @@ weekDateName day =
         7 -> "Sunday"
         _ -> ""
 
+numWeeksInAdvance :: Integer
+numWeeksInAdvance = 3
+
+numDaysInAdvance :: Integer
+numDaysInAdvance = numWeeksInAdvance * 7
+
 getGameR :: GameId -> Handler Html
 getGameR gameId = do
     currentTime <- liftIO vietnamCurrentTime
-    game <- runDB $ do
-        get404 gameId
-    let days = map (\num -> addDays num (localDay currentTime)) [0..20]
+    (game, timeslots) <- runDB $ do
+        game <- get404 gameId
+
+        -- perform SQL join with Esqueleto EDSL language
+        timeslots <- E.select 
+            $ E.from $ \ (timeslot `E.LeftOuterJoin` booking) -> do
+                E.on $ E.just (timeslot ^. TimeslotId) E.==. booking ?. BookingTimeslot
+                E.where_ $ (timeslot ^. TimeslotGame E.==. E.val gameId)
+                     E.&&. (timeslot ^. TimeslotDay  E.>=. E.val (localDay currentTime))
+                     E.&&. (timeslot ^. TimeslotTime E.>.  E.val (localTimeOfDay currentTime))
+                E.limit $ fromIntegral $ numDaysInAdvance * (toInteger.length) timeslotsPerDay
+                return
+                    ( timeslot ^. TimeslotDay
+                    , timeslot ^. TimeslotTime
+                    , booking  ?. BookingId
+                    )
+        return (game, DM.fromList [((day, time), bookingId) | (E.Value day,E.Value time,E.Value bookingId) <- timeslots])
+    $(logInfo) $ T.pack $ show timeslots
+    let days = map (\num -> addDays num (localDay currentTime)) [0..numDaysInAdvance-1]
     (formWidget, formEnctype) <- generateFormPost bookingForm
 
     defaultLayout $ do
@@ -97,8 +122,7 @@ bookingForm =
         <*> areq emailField (customFieldSettings "Email") Nothing
         <*> areq intField (customFieldSettings "Phone") Nothing
         <*> areq nPeopleField (rangeFieldSettings 1 20 (customFieldSettings "Number of People")) Nothing
-        <*> areq dayField (customFieldSettings "Day") Nothing
-        <*> areq timeFieldTypeText (customFieldSettings "Time") Nothing
+        <*> areq hiddenField "" Nothing
     where
         nPeopleField = checkBool (\n -> n>0 && n <= 20) ("There are too few or too many people!!" :: Text) intField
         

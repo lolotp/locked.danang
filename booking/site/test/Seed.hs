@@ -3,6 +3,7 @@ import Import
 import Model
 import Control.Monad.Logger (runStderrLoggingT)
 import Database.Persist.Postgresql (pgConnStr, withPostgresqlConn, runSqlConn, rawExecute)
+import Database.Persist.Sql (runMigrationUnsafe)
 import Data.Time.LocalTime
 
 insertGame :: MonadIO m => (Text, Text) -> ReaderT SqlBackend m ()
@@ -20,7 +21,7 @@ main = do
     settings <- loadAppSettingsArgs [configSettingsYmlValue] useEnv
     let conn = (pgConnStr $ appDatabaseConf settings)
     runStderrLoggingT . withPostgresqlConn conn $ runSqlConn $ do
-        runMigration migrateAll
+        runMigrationUnsafe migrateAll
         deleteWhere ([] :: [Filter Game])
         mapM_ insertGame games
         games <- selectList ([] :: [Filter Game]) []

@@ -12,8 +12,8 @@
   <tbody>
   $forall perDaySlot <- timeslotsPerDay
     <tr>
-    $forall _ <- take 7 days
-      <td><a href="javascript:void(0)" data-toggle="modal" data-target="#myModal">#{formatTime defaultTimeLocale "%I:%M %p" perDaySlot}
+    $forall day <- take 7 days
+      <td><a href="javascript:void(0)" data-toggle="modal" data-target="#myModal" data-timeslot="1">#{formatTime defaultTimeLocale "%I:%M %p" perDaySlot} timeslot #{T.pack ( show (DM.lookup (day,perDaySlot) timeslots))  }
 
 <div class="modal fade" id="myModal" role="dialog">
   <div class="modal-dialog">
