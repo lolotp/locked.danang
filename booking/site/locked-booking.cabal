@@ -83,6 +83,7 @@ library
                  , vector
                  , time
                  , foreign-store                 >= 0.1
+                 , lifted-base
 
 executable         locked-booking
     if flag(library-only)

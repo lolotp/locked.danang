@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+
 module Handler.Game where
 
 import Import
@@ -48,7 +50,22 @@ getGameR gameId = do
 postBookingR :: GameId -> Handler Html
 postBookingR gameId = do
     ((res, _), _) <- runFormPost $ bookingForm
-    $(logInfo) $ T.pack $ show res
+    newBookingError <- case res of
+        FormSuccess booking -> 
+            runDB $ do
+                insertRes <- insertBy booking
+                case insertRes of
+                    Left _ -> return $ Just "Timeslot has already been booked!"
+                    Right _ -> return Nothing
+            `catch` (\ (e :: SomeException)  -> do 
+                $(logError) $ T.pack $ show e
+                return $ Just "Database error, please try again later"
+            )
+        FormFailure msg -> return $ Just $ T.concat msg
+        FormMissing -> return $ Just "FormMissing"
+    case newBookingError of
+        Just msg -> $(logError) msg
+        Nothing -> return ()
     redirect (GameR gameId)
 
 addAttr :: Text -> Text -> [(Text,Text)] -> [(Text,Text)]
@@ -68,8 +85,8 @@ customFieldSettings fs =
 
 rangeFieldSettings :: Int -> Int -> FieldSettings site -> FieldSettings site
 rangeFieldSettings minValue maxValue fs = 
-    let attrsWithMin = addAttr "min" (T.pack (show minValue)) (fsAttrs fs) in
-    let finalAttrs = addAttr "max" (T.pack (show maxValue)) attrsWithMin in
+    let attrsWithMin = addAttr "min-disabled" (T.pack (show minValue)) (fsAttrs fs) in
+    let finalAttrs = addAttr "max-disabled" (T.pack (show maxValue)) attrsWithMin in
     fs { fsAttrs = finalAttrs}
 
 bookingForm :: Form Booking
@@ -83,6 +100,5 @@ bookingForm =
         <*> areq dayField (customFieldSettings "Day") Nothing
         <*> areq timeFieldTypeText (customFieldSettings "Time") Nothing
     where
-        nPeopleField = checkBool (>0) ("Must exceed 0" :: Text) intField
+        nPeopleField = checkBool (\n -> n>0 && n <= 20) ("There are too few or too many people!!" :: Text) intField
         
-
