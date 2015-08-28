@@ -4,6 +4,11 @@ import ClassyPrelude.Yesod
 import Database.Persist.Quasi
 import Data.Time.LocalTime
 import Data.Time.Calendar
+import Data.Map.Strict (Map)
+import Data.Map (fromList)
+
+import qualified Database.Esqueleto      as E
+import           Database.Esqueleto      ((^.),(?.))
 
 -- You can define all of your database entities in the entities file.
 -- You can find more information on persistent and how to declare entities
@@ -23,4 +28,40 @@ timeslotsFromDay startDate numWeeks =
 insertTimeslot :: MonadIO m => GameId -> (Day, TimeOfDay) -> ReaderT SqlBackend m ()
 insertTimeslot gameId (day, time) =
     insert_ $ Timeslot day time gameId
+
+numWeeksInAdvance :: Integer
+numWeeksInAdvance = 3
+
+numDaysInAdvance :: Integer
+numDaysInAdvance = numWeeksInAdvance * 7
+
+-- type to describe joined timeslot Booking data
+type TimeslotBooking = (E.Value Day, E.Value TimeOfDay, E.Value (Maybe BookingId))
+
+-- query to find all available timeslots and their associated bookings
+-- the implementation is SQL join with Esqueleto EDSL language
+availableGameTimeslotsBookingQuery :: MonadIO m => GameId -> LocalTime -> E.SqlPersistT m [TimeslotBooking]
+availableGameTimeslotsBookingQuery gameId currentTime = E.select 
+    $ E.from $ \ (timeslot `E.LeftOuterJoin` booking) -> do
+    E.on $ E.just (timeslot ^. TimeslotId) E.==. booking ?. BookingTimeslot
+    E.where_ $ 
+        (timeslot ^. TimeslotGame E.==. E.val gameId)
+        E.&&.(
+                  (timeslot ^. TimeslotDay  E.>. E.val (localDay currentTime))
+             E.||.(
+                       (timeslot ^. TimeslotDay E.==. E.val (localDay currentTime))
+                  E.&&.(timeslot ^. TimeslotTime E.>.  E.val (localTimeOfDay currentTime))
+                  )
+             )
+    E.limit $ fromIntegral $ numDaysInAdvance * (toInteger.length) timeslotsPerDay
+    return
+        ( timeslot ^. TimeslotDay
+        , timeslot ^. TimeslotTime
+        , booking  ?. BookingId
+        )
+
+timeslotBookingMapFromList :: [TimeslotBooking] -> Data.Map.Strict.Map (Day,TimeOfDay) (Maybe BookingId)
+timeslotBookingMapFromList list = 
+    Data.Map.fromList
+        [((day, time), bookingId) | (E.Value day,E.Value time,E.Value bookingId) <- list]
 
