@@ -1,0 +1,11 @@
+var timeslotFormInputId = "hident6";
+
+function onTimeslotClick(e) {
+  console.log("clicked", e.target.dataset.timetext);
+  console.log("clicked", e.target.dataset.timeslot);
+  var timeslotDom = document.getElementById("dialogTimeslotText");
+  timeslotDom.innerHTML = e.target.dataset.timetext;
+  var timeslotInputDom = document.getElementById(timeslotFormInputId);
+  timeslotInputDom.value = e.target.dataset.timeslot;
+}
+

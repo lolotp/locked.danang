@@ -18,10 +18,10 @@
           $with timeText <-  formatTime defaultTimeLocale "%I:%M %p" perDaySlot
             $if isNothing mbTimeslot 
               <span>#{timeText}
-            $elseif isJust (fromJust mbTimeslot)
+            $elseif isJust (snd (fromJust mbTimeslot))
               <span>#{timeText}
             $else
-              <a href="javascript:void(0)" data-toggle="modal" data-target="#myModal" data-timeslot="1">#{timeText}
+              <a href="javascript:void" data-timetext="#{formatTime defaultTimeLocale "%d/%m/%Y" day} #{timeText}" onclick="onTimeslotClick(event)" data-toggle="modal" data-target="#myModal" data-timeslot="#{keyToInt64 (fst (fromJust mbTimeslot))}">#{timeText}
 
 <div class="modal fade" id="myModal" role="dialog">
   <div class="modal-dialog">
@@ -35,8 +35,12 @@
         <p>Please fill in your personal information
         <form method=post action=@{BookingR gameId}#form enctype=#{formEnctype} class="form-horizontal">
           ^{formWidget}
+          <div class="form-group required ">
+            <label class="control-label  col-lg-3">Timeslot
+            <div class=" col-lg-9">
+              <span id="dialogTimeslotText">
           <input type=submit>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">
           Close
-      
+

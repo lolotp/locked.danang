@@ -41,7 +41,6 @@ getGameR gameId = do
         game <- get404 gameId
         timeslots <- availableGameTimeslotsBookingQuery gameId currentTime
         return (game, timeslotBookingMapFromList timeslots)
-    $(logInfo) $ T.pack $ show timeslots
     let days = map (\num -> addDays num (localDay currentTime)) [0..numDaysInAdvance-1]
     (formWidget, formEnctype) <- generateFormPost bookingForm
 
@@ -105,4 +104,4 @@ bookingForm =
         <*> areq hiddenField "" Nothing
     where
         nPeopleField = checkBool (\n -> n>0 && n <= 20) ("There are too few or too many people!!" :: Text) intField
-        
+

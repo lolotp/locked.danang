@@ -6,6 +6,7 @@ import Data.Time.LocalTime
 import Data.Time.Calendar
 import Data.Map.Strict (Map)
 import Data.Map (fromList)
+import Data.List (head)
 
 import qualified Database.Esqueleto      as E
 import           Database.Esqueleto      ((^.),(?.))
@@ -36,7 +37,7 @@ numDaysInAdvance :: Integer
 numDaysInAdvance = numWeeksInAdvance * 7
 
 -- type to describe joined timeslot Booking data
-type TimeslotBooking = (E.Value Day, E.Value TimeOfDay, E.Value (Maybe BookingId))
+type TimeslotBooking = (E.Value Day, E.Value TimeOfDay, E.Value TimeslotId, E.Value (Maybe BookingId))
 
 -- query to find all available timeslots and their associated bookings
 -- the implementation is SQL join with Esqueleto EDSL language
@@ -57,11 +58,17 @@ availableGameTimeslotsBookingQuery gameId currentTime = E.select
     return
         ( timeslot ^. TimeslotDay
         , timeslot ^. TimeslotTime
+        , timeslot ^. TimeslotId
         , booking  ?. BookingId
         )
 
-timeslotBookingMapFromList :: [TimeslotBooking] -> Data.Map.Strict.Map (Day,TimeOfDay) (Maybe BookingId)
+timeslotBookingMapFromList :: [TimeslotBooking] -> Data.Map.Strict.Map (Day,TimeOfDay) (TimeslotId, (Maybe BookingId))
 timeslotBookingMapFromList list = 
     Data.Map.fromList
-        [((day, time), bookingId) | (E.Value day,E.Value time,E.Value bookingId) <- list]
+        [((day, time), (timeslotId, bookingId)) | (E.Value day,E.Value time,E.Value timeslotId, E.Value bookingId) <- list]
+
+keyToInt64 :: PersistEntity a => Key a -> Int64
+keyToInt64 key =
+    let PersistInt64 entityId = Data.List.head $ keyToValues key in
+    entityId
 
