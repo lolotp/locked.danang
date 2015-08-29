@@ -4,7 +4,9 @@ import Import.NoFoundation
 import Database.Persist.Sql (ConnectionPool, runSqlPool)
 import Text.Hamlet          (hamletFile)
 import Text.Jasmine         (minifym)
-import Yesod.Auth.BrowserId (authBrowserId)
+
+import Yesod.Facebook
+import Yesod.Auth.Facebook.ServerSide
 import Yesod.Default.Util   (addStaticContentExternal)
 import Yesod.Core.Types     (Logger)
 import qualified Yesod.Core.Unsafe as Unsafe
@@ -35,6 +37,13 @@ mkYesodData "App" $(parseRoutesFile "config/routes")
 
 -- | A convenient synonym for creating forms.
 type Form x = Html -> MForm (HandlerT App IO) (FormResult x, Widget)
+
+isLoggedIn :: YesodAuth m => HandlerT m IO AuthResult
+isLoggedIn = do
+    maid <- maybeAuthId
+    return $ case maid of
+        Nothing -> AuthenticationRequired
+        _ -> Authorized
 
 -- Please see the documentation for the Yesod typeclass. There are a number
 -- of settings which can be configured by overriding methods here.
@@ -71,6 +80,8 @@ instance Yesod App where
     isAuthorized (AuthR _) _ = return Authorized
     isAuthorized FaviconR _ = return Authorized
     isAuthorized RobotsR _ = return Authorized
+    -- only allow administrator to view bookings info
+    isAuthorized (BookingsR _) False = isLoggedIn
     -- Default to Authorized for now.
     isAuthorized _ _ = return Authorized
 
@@ -111,6 +122,10 @@ instance YesodPersist App where
 instance YesodPersistRunner App where
     getDBRunner = defaultGetDBRunner appConnPool
 
+instance YesodFacebook App where
+    fbCredentials app  = appFacebookCredentials (appSettings app)
+    fbHttpManager      = getHttpManager
+
 instance YesodAuth App where
     type AuthId App = UserId
 
@@ -131,7 +146,7 @@ instance YesodAuth App where
                 }
 
     -- You can add other plugins like BrowserID, email or OAuth here
-    authPlugins _ = [authBrowserId def]
+    authPlugins _ = [authFacebook ["public_profile", "email", "user_friends"]]
 
     authHttpManager = getHttpManager
 

@@ -4,8 +4,14 @@
 static-dir:     "_env:STATIC_DIR:static"
 host:           "_env:HOST:*4" # any IPv4 host
 port:           "_env:PORT:3000"
-approot:        "_env:APPROOT:http://localhost:3000"
+approot:        "_env:APPROOT:http://dn.locked.vn/app"
 ip-from-header: "_env:IP_FROM_HEADER:false"
+
+# facebook secret configuration
+facebook:
+    app-name: "Locked.Danang"
+    app-id: "_env:FB_APPID:place_holder_id"
+    app-secret: "_env:FB_SECRET:place_holder_secret"
 
 # Optional values with the following production defaults.
 # In development, they default to the inverse.

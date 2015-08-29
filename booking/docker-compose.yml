@@ -11,6 +11,8 @@ site:
         - PGUSER=postgres
         - PGPASS
         - PGDATABASE=postgres
+        - FB_APPID=924467847625184
+        - FB_APPSECRET
     links:
         - database
     tty:

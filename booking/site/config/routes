@@ -6,4 +6,4 @@
 
 /                      HomeR    GET POST
 /games/#GameId         GameR    GET
-/bookings/#GameId      BookingR POST
+/bookings/#GameId      BookingsR GET POST

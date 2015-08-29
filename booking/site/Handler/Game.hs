@@ -51,8 +51,16 @@ getGameR gameId = do
         $(widgetFile "game")
 
 
-postBookingR :: GameId -> Handler Html
-postBookingR gameId = do
+getBookingsR :: GameId -> Handler Html
+getBookingsR gameId = do
+    maid <- maybeAuthId
+    $(logInfo) $ T.pack $ show maid
+    defaultLayout $ do
+        setTitle "Bookings"
+        $(widgetFile "bookings")
+
+postBookingsR :: GameId -> Handler Html
+postBookingsR gameId = do
     ((res, _), _) <- runFormPost $ bookingForm
     newBookingError <- case res of
         FormSuccess booking -> 

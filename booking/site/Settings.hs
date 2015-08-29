@@ -18,6 +18,9 @@ import Yesod.Default.Config2       (applyEnvValue, configSettingsYml)
 import Yesod.Default.Util          (WidgetFileSettings, widgetFileNoReload,
                                     widgetFileReload)
 
+import Facebook (Credentials (..) )
+
+
 -- | Runtime settings to configure this application. These settings can be
 -- loaded from various sources: defaults, environment variables, config files,
 -- theoretically even a database.
@@ -26,6 +29,8 @@ data AppSettings = AppSettings
     -- ^ Directory from which to serve static files.
     , appDatabaseConf           :: PostgresConf
     -- ^ Configuration settings for accessing the database.
+    , appFacebookCredentials    :: Facebook.Credentials
+    -- ^ Configuration settings for accessing Facebook API
     , appRoot                   :: Text
     -- ^ Base for all generated URLs.
     , appHost                   :: HostPreference
@@ -64,6 +69,7 @@ instance FromJSON AppSettings where
 #endif
         appStaticDir              <- o .: "static-dir"
         appDatabaseConf           <- o .: "database"
+        appFacebookCredentials    <- o .: "facebook"
         appRoot                   <- o .: "approot"
         appHost                   <- fromString <$> o .: "host"
         appPort                   <- o .: "port"
@@ -79,6 +85,15 @@ instance FromJSON AppSettings where
         appAnalytics              <- o .:? "analytics"
 
         return AppSettings {..}
+
+instance FromJSON Facebook.Credentials where
+    parseJSON = withObject "Facebook.Credentials" $ \o -> do
+        appName    <- o .: "app-name"
+        appId      <- o .: "app-id"
+        appSecret  <- o .: "app-secret"
+
+        return Facebook.Credentials {..}
+
 
 -- | Settings for 'widgetFile', such as which template languages to support and
 -- default Hamlet settings.

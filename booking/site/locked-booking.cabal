@@ -85,6 +85,9 @@ library
                  , foreign-store                 >= 0.1
                  , lifted-base
                  , esqueleto
+                 , fb
+                 , yesod-fb
+                 , yesod-auth-fb
 
 executable         locked-booking
     if flag(library-only)

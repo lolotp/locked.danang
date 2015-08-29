@@ -33,7 +33,7 @@
             Place booking
       <div class="modal-body">
         <p>Please fill in your personal information
-        <form method=post action=@{BookingR gameId}#form enctype=#{formEnctype} class="form-horizontal">
+        <form method=post action=@{BookingsR gameId}#form enctype=#{formEnctype} class="form-horizontal">
           ^{formWidget}
           <div class="form-group required ">
             <label class="control-label  col-lg-3">Timeslot
