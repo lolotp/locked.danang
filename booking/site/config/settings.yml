@@ -9,8 +9,8 @@ ip-from-header: "_env:IP_FROM_HEADER:false"
 
 # facebook secret configuration
 facebook:
-    app-name: "Locked.Danang"
-    app-id: "_env:FB_APPID:place_holder_id"
+    app-name:   "Locked.Danang"
+    app-id:     "924467847625184"
     app-secret: "_env:FB_APPSECRET:place_holder_secret"
 
 # Optional values with the following production defaults.

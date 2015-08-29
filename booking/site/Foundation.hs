@@ -123,7 +123,7 @@ instance YesodPersistRunner App where
     getDBRunner = defaultGetDBRunner appConnPool
 
 instance YesodFacebook App where
-    fbCredentials app  = appFacebookCredentials (appSettings app)
+    fbCredentials app  = myFBCredentials $ appFacebookCredentials $ appSettings app
     fbHttpManager      = getHttpManager
 
 instance YesodAuth App where

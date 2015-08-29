@@ -20,6 +20,8 @@ import Yesod.Default.Util          (WidgetFileSettings, widgetFileNoReload,
 
 import Facebook (Credentials (..) )
 
+newtype MyFBCredentials = MyFBCredentials
+    { myFBCredentials   :: Facebook.Credentials }
 
 -- | Runtime settings to configure this application. These settings can be
 -- loaded from various sources: defaults, environment variables, config files,
@@ -29,7 +31,7 @@ data AppSettings = AppSettings
     -- ^ Directory from which to serve static files.
     , appDatabaseConf           :: PostgresConf
     -- ^ Configuration settings for accessing the database.
-    , appFacebookCredentials    :: Facebook.Credentials
+    , appFacebookCredentials    :: MyFBCredentials
     -- ^ Configuration settings for accessing Facebook API
     , appRoot                   :: Text
     -- ^ Base for all generated URLs.
@@ -86,13 +88,13 @@ instance FromJSON AppSettings where
 
         return AppSettings {..}
 
-instance FromJSON Facebook.Credentials where
-    parseJSON = withObject "Facebook.Credentials" $ \o -> do
+instance FromJSON MyFBCredentials where
+    parseJSON = withObject "MyFBCredentials" $ \o -> do
         appName    <- o .: "app-name"
         appId      <- o .: "app-id"
         appSecret  <- o .: "app-secret"
 
-        return Facebook.Credentials {..}
+        return (MyFBCredentials (Facebook.Credentials {..}))
 
 
 -- | Settings for 'widgetFile', such as which template languages to support and

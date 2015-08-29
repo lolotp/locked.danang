@@ -88,6 +88,7 @@ library
                  , fb
                  , yesod-fb
                  , yesod-auth-fb
+                 , transformers
 
 executable         locked-booking
     if flag(library-only)

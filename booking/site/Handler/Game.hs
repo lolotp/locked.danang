@@ -14,6 +14,12 @@ import Data.Maybe (fromJust)
 import qualified Data.Text as T
 import qualified Data.Map  as DM
 
+import Control.Monad.Trans.Maybe
+
+import Yesod.Auth.Facebook.ServerSide (getUserAccessToken)
+import Yesod.Facebook (runYesodFbT)
+import Facebook
+
 vietnamTimezone :: TimeZone
 vietnamTimezone = TimeZone 420 False ""
 
@@ -54,7 +60,10 @@ getGameR gameId = do
 getBookingsR :: GameId -> Handler Html
 getBookingsR gameId = do
     maid <- maybeAuthId
-    $(logInfo) $ T.pack $ show maid
+    maybeUser <- runMaybeT $ do
+        accessToken <- MaybeT $ getUserAccessToken
+        lift $ runYesodFbT $ getUser (Id "me") [] $ Just accessToken
+    $(logInfo) $ T.pack $ show maybeUser
     defaultLayout $ do
         setTitle "Bookings"
         $(widgetFile "bookings")
