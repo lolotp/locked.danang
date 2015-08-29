@@ -1,0 +1,40 @@
+server {
+    listen              80;
+    server_name         dn.locked.vn 52.76.44.135;
+
+    access_log  /var/log/nginx/dn.locked.vn.log;
+    error_log   /var/log/nginx/dn.locked.vn.log;
+
+    error_page  404              /404.html;
+    # redirect server error pages to the static page /50x.html
+    error_page   500 502 503 504  /50x.html;
+
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+
+    location /sites {
+        rewrite ^/sites(.*) http://hcm.locked.vn/sites$1 permanent;
+    }
+
+    location = / {
+        return 301 /vi;
+    }
+
+    location / {
+        autoindex off;
+        alias /home/ubuntu/locked/;
+    }
+
+    location /vi {
+        autoindex off;
+        alias /home/ubuntu/locked/;
+    }
+
+    location /app/ {
+        proxy_pass http://localhost:3000/;
+    }
+
+    #rewrite ^/favicon.ico$       http://hcm.locked.vn/misc/favicon.ico
+}
+
