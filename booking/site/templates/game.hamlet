@@ -2,11 +2,13 @@
 
 <p>#{gameDescription game}
 
-<table>
+<table width="80%">
   <thead>
   $forall day <- take 7 days
-    $with (year, month, date) <- toGregorian day
-      <th>#{weekDateName day} on #{date}/#{month}/#{year}
+    <th>#{weekDateName day} (#{formatTime defaultTimeLocale "%d/%m/%Y" day})
+  <colgroup>
+  $forall _ <- take 7 days
+    <col style="width:14%">
   <tbody>
   $forall perDaySlot <- timeslotsPerDay
     <tr>
@@ -28,9 +30,9 @@
           <button type="button" class="close" data-dismiss="modal">
             &times;
           <h4 class="modal-title">
-            Place booking
+            _{MsgPlaceBooking}
       <div class="modal-body">
-        <p>Please fill in your personal information
+        <p>_{MsgPleaseFillInFormInfo}
         <form method=post action=@{BookingsR gameId}#form enctype=#{formEnctype} class="form-horizontal">
           ^{formWidget}
           <div class="form-group required ">

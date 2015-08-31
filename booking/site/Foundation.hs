@@ -5,11 +5,12 @@ import Database.Persist.Sql (ConnectionPool, runSqlPool)
 import Text.Hamlet          (hamletFile)
 import Text.Jasmine         (minifym)
 
-import Yesod.Facebook
-import Yesod.Auth.Facebook.ServerSide
 import Yesod.Default.Util   (addStaticContentExternal)
 import Yesod.Core.Types     (Logger)
 import qualified Yesod.Core.Unsafe as Unsafe
+
+import Yesod.Facebook
+import Yesod.Auth.Facebook.ServerSide
 
 import Control.Monad.Trans.Maybe
 
@@ -27,6 +28,9 @@ data App = App
 
 instance HasHttpManager App where
     getHttpManager = appHttpManager
+
+-- message for internationalization
+mkMessage "App" "messages" "vi"
 
 -- This is where we define all of the routes in our application. For a full
 -- explanation of the syntax, please see:

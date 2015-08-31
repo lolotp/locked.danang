@@ -25,13 +25,13 @@ weekDateName :: Day -> Text
 weekDateName day =
     let (_, _, weekDate) = toWeekDate day in
     case weekDate of
-        1 -> "Monday"
-        2 -> "Tuesday"
-        3 -> "Wednesday"
-        4 -> "Thursday"
-        5 -> "Friday"
-        6 -> "Saturday"
-        7 -> "Sunday"
+        1 -> "Mon"
+        2 -> "Tue"
+        3 -> "Wed"
+        4 -> "Thu"
+        5 -> "Fri"
+        6 -> "Sat"
+        7 -> "Sun"
         _ -> ""
 
 getGameR :: GameId -> Handler Html
@@ -110,7 +110,7 @@ bookingForm :: Form Booking
 bookingForm = 
     let formLayout = BootstrapHorizontalForm (ColLg 0) (ColLg 3) (ColLg 0) (ColLg 9) in
     renderBootstrap3 formLayout $ Booking
-        <$> areq textField (customFieldSettings "Name") Nothing
+        <$> areq textField (customFieldSettings (fieldSettingsLabel MsgName)) Nothing
         <*> areq emailField (customFieldSettings "Email") Nothing
         <*> areq intField (customFieldSettings "Phone") Nothing
         <*> areq nPeopleField (rangeFieldSettings 1 20 (customFieldSettings "Number of People")) Nothing
