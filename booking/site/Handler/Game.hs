@@ -111,9 +111,9 @@ bookingForm =
     let formLayout = BootstrapHorizontalForm (ColLg 0) (ColLg 3) (ColLg 0) (ColLg 9) in
     renderBootstrap3 formLayout $ Booking
         <$> areq textField (customFieldSettings (fieldSettingsLabel MsgName)) Nothing
-        <*> areq emailField (customFieldSettings "Email") Nothing
-        <*> areq intField (customFieldSettings "Phone") Nothing
-        <*> areq nPeopleField (rangeFieldSettings 1 20 (customFieldSettings "Number of People")) Nothing
+        <*> areq emailField (customFieldSettings (fieldSettingsLabel MsgEmail)) Nothing
+        <*> areq intField (customFieldSettings (fieldSettingsLabel MsgPhone)) Nothing
+        <*> areq nPeopleField (rangeFieldSettings 1 20 (customFieldSettings (fieldSettingsLabel MsgNumberOfPeople))) Nothing
         <*> areq hiddenField "" Nothing
     where
         nPeopleField = checkBool (\n -> n>0 && n <= 20) ("There are too few or too many people!!" :: Text) intField
