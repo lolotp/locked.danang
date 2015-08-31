@@ -11,6 +11,8 @@ import Yesod.Default.Util   (addStaticContentExternal)
 import Yesod.Core.Types     (Logger)
 import qualified Yesod.Core.Unsafe as Unsafe
 
+import Control.Monad.Trans.Maybe
+
 -- | The foundation datatype for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
 -- starts running, such as database connections. Every handler will have
@@ -44,6 +46,17 @@ isLoggedIn = do
     return $ case maid of
         Nothing -> AuthenticationRequired
         _ -> Authorized
+
+isUserVerifiedBy :: (User -> Bool) -> HandlerT App IO AuthResult
+isUserVerifiedBy verifyFunc = do
+    mbUser <- runMaybeT $ do
+        maid <- MaybeT $ maybeAuthId
+        mbUser <- MaybeT $ runDB $ do
+            get maid
+        return mbUser
+    return $ case mbUser of
+        Nothing -> AuthenticationRequired
+        Just user -> if (verifyFunc user) then Authorized else (Unauthorized "Insufficient privilege")
 
 -- Please see the documentation for the Yesod typeclass. There are a number
 -- of settings which can be configured by overriding methods here.
@@ -81,7 +94,7 @@ instance Yesod App where
     isAuthorized FaviconR _ = return Authorized
     isAuthorized RobotsR _ = return Authorized
     -- only allow administrator to view bookings info
-    isAuthorized (BookingsR _) False = isLoggedIn
+    isAuthorized (BookingsR _) False = isUserVerifiedBy userIsStaff
     -- Default to Authorized for now.
     isAuthorized _ _ = return Authorized
 
@@ -143,6 +156,8 @@ instance YesodAuth App where
             Nothing -> Just <$> insert User
                 { userIdent = credsIdent creds
                 , userPassword = Nothing
+                , userIsStaff = True
+                , userIsAdmin = False
                 }
 
     -- You can add other plugins like BrowserID, email or OAuth here

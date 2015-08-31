@@ -45,7 +45,7 @@ availableGameTimeslotsBookingQuery :: MonadIO m => GameId -> LocalTime -> E.SqlP
 availableGameTimeslotsBookingQuery gameId currentTime = E.select 
     $ E.from $ \ (timeslot `E.LeftOuterJoin` booking) -> do
     E.on $ E.just (timeslot ^. TimeslotId) E.==. booking ?. BookingTimeslot
-    E.where_ $ 
+    E.where_ $
         (timeslot ^. TimeslotGame E.==. E.val gameId)
         E.&&.(
                   (timeslot ^. TimeslotDay  E.>. E.val (localDay currentTime))
@@ -61,6 +61,16 @@ availableGameTimeslotsBookingQuery gameId currentTime = E.select
         , timeslot ^. TimeslotId
         , booking  ?. BookingId
         )
+
+gameBookingsQuery :: MonadIO m => GameId -> Day -> Integer -> E.SqlPersistT m [(Entity Timeslot, Entity Booking)]
+gameBookingsQuery gameId fromDay numDay = E.select
+    $ E.from $ \ (booking `E.InnerJoin` timeslot) -> do
+    E.on $ booking ^. BookingTimeslot E.==. timeslot ^. TimeslotId
+    E.where_ $ 
+        (timeslot ^. TimeslotGame E.==. E.val gameId)
+        E.&&. (timeslot ^. TimeslotDay E.>=. E.val fromDay )
+        E.&&. (timeslot ^. TimeslotDay E.<. E.val (addDays numDay fromDay) )
+    return (timeslot, booking)
 
 timeslotBookingMapFromList :: [TimeslotBooking] -> Data.Map.Strict.Map (Day,TimeOfDay) (TimeslotId, (Maybe BookingId))
 timeslotBookingMapFromList list = 

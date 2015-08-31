@@ -1,6 +1,8 @@
 User
     ident Text
     password Text Maybe
+    isStaff Bool default=False
+    isAdmin Bool default=False
     UniqueUser ident
     deriving Typeable
 Email

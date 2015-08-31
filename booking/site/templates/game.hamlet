@@ -1,7 +1,5 @@
 <h1>#{gameName game}
 
-<p>#{show currentTime}
-
 <p>#{gameDescription game}
 
 <table>

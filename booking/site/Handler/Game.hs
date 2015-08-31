@@ -14,12 +14,6 @@ import Data.Maybe (fromJust)
 import qualified Data.Text as T
 import qualified Data.Map  as DM
 
-import Control.Monad.Trans.Maybe
-
-import Yesod.Auth.Facebook.ServerSide (getUserAccessToken)
-import Yesod.Facebook (runYesodFbT)
-import Facebook
-
 vietnamTimezone :: TimeZone
 vietnamTimezone = TimeZone 420 False ""
 
@@ -59,11 +53,11 @@ getGameR gameId = do
 
 getBookingsR :: GameId -> Handler Html
 getBookingsR gameId = do
-    maid <- maybeAuthId
-    maybeUser <- runMaybeT $ do
-        accessToken <- MaybeT $ getUserAccessToken
-        lift $ runYesodFbT $ getUser (Id "me") [] $ Just accessToken
-    $(logInfo) $ T.pack $ show maybeUser
+    currentTime <- liftIO vietnamCurrentTime
+    bookedTimeslots <- runDB $ do
+        queriedSlots <- gameBookingsQuery gameId (localDay currentTime) 2
+        return [ (ts, b) | (Entity _ ts, Entity _ b) <- queriedSlots]
+
     defaultLayout $ do
         setTitle "Bookings"
         $(widgetFile "bookings")
@@ -78,7 +72,7 @@ postBookingsR gameId = do
                 case insertRes of
                     Left _ -> return $ Just "Timeslot has already been booked!"
                     Right _ -> return Nothing
-            `catch` (\ (e :: SomeException)  -> do 
+            `catch` (\ (e :: SomeException)  -> do
                 $(logError) $ T.pack $ show e
                 return $ Just "Database error, please try again later"
             )

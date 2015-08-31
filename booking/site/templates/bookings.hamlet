@@ -1,1 +1,17 @@
 <h2>Bookings
+
+<table width="80%">
+  <thead>
+    <th>Day
+    <th>Time
+    <th>Name
+    <th>Phone
+    <th>Email
+  <tbody>
+  $forall (timeslot, booking) <- bookedTimeslots
+    <tr>
+      <td>#{show (timeslotDay timeslot)}
+      <td>#{show (timeslotTime timeslot)}
+      <td>#{bookingName booking}
+      <td>#{bookingPhone booking}
+      <td>#{bookingEmail booking}
