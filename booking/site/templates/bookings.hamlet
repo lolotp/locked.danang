@@ -1,5 +1,9 @@
 <h2>Bookings
 
+<form method=get action=@{BookingsR gameId}#form enctype=#{formEnctype} class="form-horizontal">
+  ^{formWidget}
+  <input type=submit>
+
 <table width="80%">
   <thead>
     <th>Day

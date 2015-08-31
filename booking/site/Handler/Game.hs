@@ -54,8 +54,10 @@ getGameR gameId = do
 getBookingsR :: GameId -> Handler Html
 getBookingsR gameId = do
     currentTime <- liftIO vietnamCurrentTime
+    ((formResult, formWidget), formEnctype) <- runFormGet $ timeDurationForm $ localDay currentTime
+    let (queryDay, queryNumOfDay) = case formResult of { FormSuccess pair -> pair ; _ -> (localDay currentTime, 1)}
     bookedTimeslots <- runDB $ do
-        queriedSlots <- gameBookingsQuery gameId (localDay currentTime) 2
+        queriedSlots <- gameBookingsQuery gameId queryDay queryNumOfDay
         return [ (ts, b) | (Entity _ ts, Entity _ b) <- queriedSlots]
 
     defaultLayout $ do
@@ -115,4 +117,10 @@ bookingForm =
         <*> areq hiddenField "" Nothing
     where
         nPeopleField = checkBool (\n -> n>0 && n <= 20) ("There are too few or too many people!!" :: Text) intField
+
+timeDurationForm :: Day -> Form (Day, Integer)
+timeDurationForm defaultDay =
+    renderBootstrap3 BootstrapBasicForm $ (,)
+        <$> areq dayField (withSmallInput "Day") (Just defaultDay)
+        <*> areq intField (withSmallInput "Number of day") (Just 1)
 
