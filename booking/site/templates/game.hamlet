@@ -69,7 +69,7 @@
                 <label class="control-label  col-lg-3">Timeslot
                 <div class=" col-lg-9">
                   <span id="dialogTimeslotText">
-              <input type=submit>
+              <input type=submit class="save-button">
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">
               Close

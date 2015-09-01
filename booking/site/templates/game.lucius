@@ -136,8 +136,21 @@ a.schedule-open:hover, a.schedule-open:focus {
     font-weight: bold;
 }
 
-.modal-dialog {
-    color: #333;
+.modal-content {
+    background-color: #404040;
+}
+
+.close {
+    color: #fff;
+}
+
+form .save-button {
+    background: url(http://dn.locked.vn/sites/all/themes/att_locked/images/submit.png) no-repeat;
+    color: #000;
+    padding: 0;
+    border: none;
+    width: 82px;
+    height: 28px;
 }
 
 footer {
