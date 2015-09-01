@@ -1,5 +1,143 @@
 body {
     background-color: #151223;
+    color: #fff;
+    font-size: 16px;
+}
+
+#image-stripe {
+    background-color: #fff;
+}
+
+ul {
+    margin-bottom: 0px;
+}
+
+ul li {
+    display: inline;
+}
+
+#game-detail {
+    margin: 100px 0;
+}
+
+#game-detail .image {
+    background: #fff;
+    padding: 5px;
+    height : 180px;
+    width : 180px;
+}
+
+#game-detail .col-md-9 {
+    padding-left: 50px;
+    font-family: 'Roboto Condensed',sans-serif;
+}
+
+#game-detail .col-md-9 h1 {
+    background: url(http://dn.locked.vn/sites/all/themes/att_locked/images/bg_title_game.png) no-repeat;
+    margin: 0;
+    text-transform: uppercase;
+    height: 59px;
+    padding: 10px;
+}
+
+#game-detail .col-md-9 .game-difficulty, #game-detail .col-md-9 .member {
+    padding: 10px 0;
+}
+
+.member {
+    font-size: 18px;
+    line-height: 25px;
+}
+
+#game-detail .col-md-9 .game-difficulty .vote {
+    margin-top: 0;
+}
+
+.game-difficulty .vote {
+    display: block;
+    height: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#game-detail .col-md-9 .game-difficulty strong, #game-detail .col-md-9 .member strong {
+    font-size: 17px;
+    text-transform: inherit;
+}
+
+.game-difficulty strong, .member strong {
+    display: block;
+    float: left;
+    margin-right: 10px;
+    line-height: 25px;
+}
+
+.game-difficulty .unvote-line {
+    float: left;
+    background: transparent url(http://dn.locked.vn/sites/all/themes/att_locked/images/unvote-icon.png) repeat-x left center;
+    width: 113px;
+    display: inline-block;
+    height: 100%;
+}
+
+.game-difficulty .vote-line {
+    background: transparent url(http://dn.locked.vn/sites/all/themes/att_locked/images/vote-icon.png) repeat-x left center;
+    display: inline-block;
+    height: 100%
+}
+
+#game-detail .col-md-9 .game-meta {
+    float: left;
+    width: 100%;
+}
+
+.schedule-container {
+    font-family: 'Roboto Condensed',sans-serif;
+}
+
+.table {
+    width: 100%;
+    margin-bottom:20px;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table.table-schedule tr th strong {
+    color: #6CCEF5;
+}
+
+.table.table-schedule tr th, .table.table-schedule tr td {
+    text-align: center;
+    background: transparent !important;
+    border-top: 0;
+    font-weight: normal;
+    padding: 0;
+    line-height: 35px;
+}
+
+.schedule-passed {
+    display: block;
+    color: #34302C;
+}
+
+a.schedule-open {
+    color: #fff;
+}
+
+a.schedule-open:hover, a.schedule-open:focus {
+    color: #6CCEF5;
+    text-decoration: none;
+}
+
+.schedule-reserved {
+    background: #6CCEF5;
+    padding: 0 8px;
+    display: block;
+    font-weight: bold;
+}
+
+.modal-dialog {
+    color: #333;
 }
 
 footer {

@@ -1,46 +1,76 @@
-<h1>#{gameName game}
+<div id="image-stripe">
+  <div class="container">
+    <div class="row">
+      <ul>
+        <li style="width: 293px;">
+          <img src="http://dn.locked.vn/sites/default/files/styles/image_slide/public/image/slider_the_gioi_ngc_1.jpg?itok=ETnZ2nOr">
+        <li style="width: 293px;">
+          <img src="http://dn.locked.vn/sites/default/files/styles/image_slide/public/image/slider_the_gioi_ngc_1.jpg?itok=ETnZ2nOr">
 
-<p>#{gameDescription game}
+<div class="container">
+  <div class="row">
+    <div id="game-detail">
+      <div class="container">
+        <div class="row">
+          <div class="span12">
+            <div class="col-md-2">
+              <div class="image">
+                <img src="#{gameImageUrl game}">
+            <div class="col-md-9">
+              <h1>#{gameName game}
+              <div class="game-difficulty col-md-4">
+                <strong>Độ khó:</strong>
+                <div class="vote">
+                  <div class="unvote-line">
+                    <div class="vote-line" style="width: #{gameDifficulty game}%">
+              <div class="member col-md-4">
+                <strong>Số người:</strong>
+                #{gameMinPeople game} đến #{gameMaxPeople game} người chơi 
 
-<table width="80%">
-  <thead>
-  $forall day <- take 7 days
-    <th>#{weekDateName day} (#{formatTime defaultTimeLocale "%d/%m/%Y" day})
-  <colgroup>
-  $forall _ <- take 7 days
-    <col style="width:14%">
-  <tbody>
-  $forall perDaySlot <- timeslotsPerDay
-    <tr>
-    $forall day <- take 7 days
-      <td>
-        $with mbTimeslot <- DM.lookup (day,perDaySlot) timeslots
-          $with timeText <-  formatTime defaultTimeLocale "%I:%M %p" perDaySlot
-            $if isNothing mbTimeslot 
-              <span>#{timeText}
-            $elseif isJust (snd (fromJust mbTimeslot))
-              <span>#{timeText}
-            $else
-              <a href="javascript:void" data-timetext="#{formatTime defaultTimeLocale "%d/%m/%Y" day} #{timeText}" onclick="onTimeslotClick(event)" data-toggle="modal" data-target="#myModal" data-timeslot="#{keyToInt64 (fst (fromJust mbTimeslot))}">#{timeText}
+              <div class="game-meta">
+                #{gameDescription game}
 
-<div class="modal fade" id="myModal" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">
-            &times;
-          <h4 class="modal-title">
-            _{MsgPlaceBooking}
-      <div class="modal-body">
-        <p>_{MsgPleaseFillInFormInfo}
-        <form method=post action=@{BookingsR gameId}#form enctype=#{formEnctype} class="form-horizontal">
-          ^{formWidget}
-          <div class="form-group required ">
-            <label class="control-label  col-lg-3">Timeslot
-            <div class=" col-lg-9">
-              <span id="dialogTimeslotText">
-          <input type=submit>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">
-          Close
+    <table class="table table-schedule schedule-container">
+      <thead>
+      $forall day <- take 7 days
+        <th>
+          <strong>#{weekDateName day} 
+          (#{formatTime defaultTimeLocale "%d/%m/%Y" day})
+      <colgroup>
+      $forall _ <- take 7 days
+        <col style="width:14%">
+      <tbody>
+      $forall perDaySlot <- timeslotsPerDay
+        <tr>
+        $forall day <- take 7 days
+          <td>
+            $with mbTimeslot <- DM.lookup (day,perDaySlot) timeslots
+              $with timeText <-  formatTime defaultTimeLocale "%I:%M %p" perDaySlot
+                $if isNothing mbTimeslot 
+                  <span class="schedule-passed">#{timeText}
+                $elseif isJust (snd (fromJust mbTimeslot))
+                  <span class="schedule-reserved">_{MsgReserved}
+                $else
+                  <a href="javascript:void" class="schedule-open" data-timetext="#{formatTime defaultTimeLocale "%d/%m/%Y" day} #{timeText}" onclick="onTimeslotClick(event)" data-toggle="modal" data-target="#myModal" data-timeslot="#{keyToInt64 (fst (fromJust mbTimeslot))}">#{timeText}
+
+    <div class="modal fade" id="myModal" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">
+                &times;
+              <h4 class="modal-title">
+                _{MsgPlaceBooking}
+          <div class="modal-body">
+            <p>_{MsgPleaseFillInFormInfo}
+            <form method=post action=@{BookingsR gameId}#form enctype=#{formEnctype} class="form-horizontal">
+              ^{formWidget}
+              <div class="form-group required ">
+                <label class="control-label  col-lg-3">Timeslot
+                <div class=" col-lg-9">
+                  <span id="dialogTimeslotText">
+              <input type=submit>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              Close
 

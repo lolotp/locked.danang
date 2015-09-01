@@ -4,3 +4,4 @@ Name: Name
 Email: Email
 Phone: Phone
 NumberOfPeople: Number of people
+Reserved: Reserved

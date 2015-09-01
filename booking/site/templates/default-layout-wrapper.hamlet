@@ -26,16 +26,15 @@ $newline never
     <div id="header-wrapper" class="wrapper">
       <div class="container">
         <div class="row">
-          <div id="header" class="clearfix">
+          <div id="header">
             <a href="http://dn.locked.vn/vi" title="Home" id="logo">
               <img src="http://dn.locked.vn/sites/all/themes/att_locked/logo.png" alt="Home"> </a>
 
-    <div class="container">
-      <header>
-      <div id="main" role="main">
-        ^{pageBody pc}
-      <footer>
-        #{appCopyright $ appSettings master}
+    <div id="main" role="main">
+      ^{pageBody pc}
+
+    <footer>
+      #{appCopyright $ appSettings master}
 
     $maybe analytics <- appAnalytics $ appSettings master
       <script>

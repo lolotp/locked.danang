@@ -13,6 +13,10 @@ Email
 Game
     name Text
     description Text
+    difficulty Int
+    minPeople Int
+    maxPeople Int
+    imageUrl  Text
     UniqueName name
 Timeslot
     day Day
