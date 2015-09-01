@@ -23,6 +23,13 @@ $newline never
     <script>
       document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/,'js');
   <body>
+    <div id="header-wrapper" class="wrapper">
+      <div class="container">
+        <div class="row">
+          <div id="header" class="clearfix">
+            <a href="dn.locked.vn/vi" title="Home" id="logo">
+              <img src="http://dn.locked.vn/sites/all/themes/att_locked/logo.png" alt="Home"> </a>
+
     <div class="container">
       <header>
       <div id="main" role="main">

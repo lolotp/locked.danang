@@ -1,0 +1,7 @@
+body {
+    background-color: #151223;
+}
+
+footer {
+    text-align: center
+}
