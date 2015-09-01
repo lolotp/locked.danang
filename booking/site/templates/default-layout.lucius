@@ -2,3 +2,8 @@
     background: url(http://dn.locked.vn/sites/all/themes/att_locked/images/bg_header.jpg) no-repeat;
     height: 150px;
 }
+
+#header-wrapper #header #logo img {
+    margin-top: 27px;
+}
+
