@@ -11,6 +11,7 @@
     <th>Name
     <th>Phone
     <th>Email
+    <th>NumberOfPeople
   <tbody>
   $forall (timeslot, booking) <- bookedTimeslots
     <tr>
@@ -19,3 +20,4 @@
       <td>#{bookingName booking}
       <td>#{bookingPhone booking}
       <td>#{bookingEmail booking}
+      <td>#{bookingNumberOfPeople booking}

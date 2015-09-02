@@ -8,3 +8,4 @@ Reserved: Đã đặt chỗ
 Close: Thoát
 Difficulty: Độ khó
 RecommendedNumberOfPeople minPeople@Int maxPeople@Int: #{show minPeople} đến #{show maxPeople} người chơi 
+Timeslot: Thời gian

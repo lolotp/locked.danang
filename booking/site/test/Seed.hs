@@ -20,8 +20,8 @@ sawDescription = "Kẻ giết người hàng loạt JigSaw đã trở lại cùn
 
 games :: [Game]
 games =
-    [ Game "Saw"      sawDescription 100 6 8 "http://dn.locked.vn/sites/default/files/styles/medium/public/image/thumb_saw.png"
-    , Game "Pharaohs" pharaohDescription  80 8 10 "http://dn.locked.vn/sites/default/files/styles/medium/public/image/thumb_pharaohs.png"
+    [ Game "Saw"      sawDescription 100 4 8 "http://dn.locked.vn/sites/default/files/styles/medium/public/image/thumb_saw.png"
+    , Game "Pharaohs" pharaohDescription  80 4 8 "http://dn.locked.vn/sites/default/files/styles/medium/public/image/thumb_pharaohs.png"
     ]
 
 gamePreviewImages :: [[Text]]
