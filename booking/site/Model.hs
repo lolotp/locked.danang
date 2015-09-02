@@ -21,6 +21,11 @@ import Control.Monad.Trans.Maybe
 share [mkPersist sqlSettings, mkMigrate "migrateAll"]
     $(persistFileWith lowerCaseSettings "config/models")
 
+
+---------------------------------------------
+-- Application data constants
+---------------------------------------------
+
 timeslotsPerDay :: [TimeOfDay]
 timeslotsPerDay = 
     let f h m = TimeOfDay h m 0 in
@@ -41,10 +46,14 @@ numWeeksInAdvance = 3
 numDaysInAdvance :: Integer
 numDaysInAdvance = numWeeksInAdvance * 7
 
--- type to describe joined timeslot Booking data
+---------------------------------------------
+-- Database queries
+---------------------------------------------
+
+-- | Type to describe joined timeslot Booking data
 type TimeslotBooking = (E.Value Day, E.Value TimeOfDay, E.Value TimeslotId, E.Value (Maybe BookingId))
 
--- query to find all available timeslots and their associated bookings
+-- | Query to find all available timeslots and their associated bookings
 -- the implementation is SQL join with Esqueleto EDSL language
 availableGameTimeslotsBookingQuery :: MonadIO m => GameId -> LocalTime -> E.SqlPersistT m [TimeslotBooking]
 availableGameTimeslotsBookingQuery gameId currentTime = E.select 
