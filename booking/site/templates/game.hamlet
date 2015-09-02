@@ -2,10 +2,9 @@
   <div class="container">
     <div class="row">
       <ul>
-        <li style="width: 293px;">
-          <img src="http://dn.locked.vn/sites/default/files/styles/image_slide/public/image/slider_the_gioi_ngc_1.jpg?itok=ETnZ2nOr">
-        <li style="width: 293px;">
-          <img src="http://dn.locked.vn/sites/default/files/styles/image_slide/public/image/slider_the_gioi_ngc_1.jpg?itok=ETnZ2nOr">
+        $forall Entity _ img <- previewImages
+          <li style="width: 293px;">
+            <img src="#{previewImageUrl img}">
 
 <div class="container">
   <div class="row">
@@ -19,12 +18,12 @@
             <div class="col-md-9">
               <h1>#{gameName game}
               <div class="game-difficulty col-md-4">
-                <strong>Độ khó:</strong>
+                <strong>_{MsgDifficulty}:</strong>
                 <div class="vote">
                   <div class="unvote-line">
                     <div class="vote-line" style="width: #{gameDifficulty game}%">
               <div class="member col-md-4">
-                <strong>Số người:</strong>
+                <strong>_{MsgNumberOfPeople}:</strong>
                 #{gameMinPeople game} đến #{gameMaxPeople game} người chơi 
 
               <div class="game-meta">
@@ -72,5 +71,5 @@
               <input type=submit class="save-button">
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">
-              Close
+              _{MsgClose}
 

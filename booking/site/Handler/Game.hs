@@ -37,10 +37,11 @@ weekDateName day =
 getGameR :: GameId -> Handler Html
 getGameR gameId = do
     currentTime <- liftIO vietnamCurrentTime
-    (game, timeslots) <- runDB $ do
-        game <- get404 gameId
-        timeslots <- availableGameTimeslotsBookingQuery gameId currentTime
-        return (game, timeslotBookingMapFromList timeslots)
+    game <- runDB $ get404 gameId
+    timeslots  <- runDB $ do
+        ts <- availableGameTimeslotsBookingQuery gameId currentTime
+        return $ timeslotBookingMapFromList ts
+    previewImages <- runDB $ selectList [PreviewImageGame ==. gameId] []
     let days = map (\num -> addDays num (localDay currentTime)) [0..numDaysInAdvance-1]
     (formWidget, formEnctype) <- generateFormPost bookingForm
 

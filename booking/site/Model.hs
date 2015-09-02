@@ -19,7 +19,9 @@ share [mkPersist sqlSettings, mkMigrate "migrateAll"]
     $(persistFileWith lowerCaseSettings "config/models")
 
 timeslotsPerDay :: [TimeOfDay]
-timeslotsPerDay = map (\hour -> TimeOfDay hour 0 0) [9..21]
+timeslotsPerDay = 
+    let f h m = TimeOfDay h m 0 in
+    [f 9 0, f 10 30, f 12 0, f 13 15, f 14 45, f 16 15, f 17 45, f 19 15, f 20 45]
 
 timeslotsFromDay :: Day -> Int -> [(Day, TimeOfDay)]
 timeslotsFromDay startDate numWeeks = 

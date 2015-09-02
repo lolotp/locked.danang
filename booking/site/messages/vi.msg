@@ -1,7 +1,10 @@
-PleaseFillInFormInfo: Xin vui lòng điền vào thông tin đặt chỗ
-PlaceBooking: Place booking
-Name: Name
+PleaseFillInFormInfo: Xin vui lòng điền đầy đủ thông tin
+PlaceBooking: Đặt chỗ
+Name: Họ tên
 Email: Email
-Phone: Phone
-NumberOfPeople: Number of people
-Reserved: Reserved
+Phone: Số điện thoại
+NumberOfPeople: Số người
+Reserved: Đã đặt chỗ
+Close: Thoát
+Difficulty: Độ khó
+RecommendedNumberOfPeople minPeople@Int maxPeople@Int: #{show minPeople} đến #{show maxPeople} người chơi 

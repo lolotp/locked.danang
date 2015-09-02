@@ -30,5 +30,8 @@ Booking
     timeslot TimeslotId
     UniqeTimeslot timeslot
     deriving Show
+PreviewImage
+    url Text
+    game GameId
 
  -- By default this file is used in Model.hs (which is imported by Foundation.hs)
