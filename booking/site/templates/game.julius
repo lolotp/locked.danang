@@ -7,7 +7,7 @@ $( document ).ready(function() {
   setTimeout(function(){
     goToByScroll(hash);
   },200);
-}
+});
 
 var timeslotFormInputId = "#{Text.Julius.rawJS bookingFormTimeslotFieldId}";
 
