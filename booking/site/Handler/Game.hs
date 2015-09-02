@@ -57,13 +57,27 @@ getBookingsR gameId = do
     currentTime <- liftIO vietnamCurrentTime
     ((formResult, formWidget), formEnctype) <- runFormGet $ timeDurationForm $ localDay currentTime
     let (queryDay, queryNumOfDay) = case formResult of { FormSuccess pair -> pair ; _ -> (localDay currentTime, 1)}
-    bookedTimeslots <- runDB $ do
-        queriedSlots <- gameBookingsQuery gameId queryDay queryNumOfDay
-        return [ (ts, b) | (Entity _ ts, Entity _ b) <- queriedSlots]
+    bookedTimeslots <- runDB $ gameBookingsQuery gameId queryDay queryNumOfDay
 
     defaultLayout $ do
+        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
         setTitle "Bookings"
         $(widgetFile "bookings")
+
+postDeleteBookingR :: BookingId -> Handler TypedContent
+postDeleteBookingR bookingId = do
+    (mbGame, _) <- runDB $ findAndDeleteBookingQuery bookingId
+    case mbGame of
+        Just gameId -> redirect $ BookingsR gameId
+        Nothing -> redirect HomeR
+
+
+deleteBookingR :: BookingId -> Handler TypedContent
+deleteBookingR bookingId = do
+    (_, nDelete) <- runDB $ findAndDeleteBookingQuery bookingId
+    selectRep $ do
+        provideRep $ return $ object
+            [ "number_of_rows_deleted" .= nDelete]
 
 postBookingsR :: GameId -> Handler Html
 postBookingsR gameId = do

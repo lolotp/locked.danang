@@ -1,0 +1,14 @@
+function onDeleteClick(e, url) {
+  $.ajax({
+    url: url,
+    type: "DELETE",
+    success: function(result){
+      console.log(result);
+      if (result.number_of_rows_deleted > 0) {
+        var row = e.target.parentNode.parentNode;
+        var tableBody = row.parentNode;
+        tableBody.removeChild(row);
+      }
+    }
+  });
+}

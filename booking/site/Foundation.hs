@@ -99,6 +99,7 @@ instance Yesod App where
     isAuthorized RobotsR _ = return Authorized
     -- only allow administrator to view bookings info
     isAuthorized (BookingsR _) False = isUserVerifiedBy userIsStaff
+    isAuthorized (DeleteBookingR _) _ = isUserVerifiedBy userIsStaff
     -- Default to Authorized for now.
     isAuthorized _ _ = return Authorized
 

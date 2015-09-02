@@ -10,6 +10,9 @@ import Data.List (head)
 
 import qualified Database.Esqueleto      as E
 import           Database.Esqueleto      ((^.),(?.))
+import Database.Persist.Sql (deleteWhereCount)
+
+import Control.Monad.Trans.Maybe
 
 -- You can define all of your database entities in the entities file.
 -- You can find more information on persistent and how to declare entities
@@ -73,6 +76,17 @@ gameBookingsQuery gameId fromDay numDay = E.select
         E.&&. (timeslot ^. TimeslotDay E.>=. E.val fromDay )
         E.&&. (timeslot ^. TimeslotDay E.<. E.val (addDays numDay fromDay) )
     return (timeslot, booking)
+
+findAndDeleteBookingQuery :: MonadIO m => BookingId -> ReaderT SqlBackend m (Maybe (Key Game), Int64)
+findAndDeleteBookingQuery bookingId = do
+    mbGame <-  runMaybeT $ do
+        booking <- MaybeT $ get bookingId
+        ts <- MaybeT $ get (bookingTimeslot booking)
+        return (timeslotGame ts)
+    nDelete <- case mbGame of
+        Nothing -> return 0
+        Just _ -> deleteWhereCount [BookingId ==. bookingId]
+    return (mbGame, nDelete)
 
 timeslotBookingMapFromList :: [TimeslotBooking] -> Data.Map.Strict.Map (Day,TimeOfDay) (TimeslotId, (Maybe BookingId))
 timeslotBookingMapFromList list = 

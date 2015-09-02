@@ -1,23 +1,29 @@
-<h2>Bookings
+<div class="container">
+  <div class="row">
+    <h2>Bookings
 
-<form method=get action=@{BookingsR gameId}#form enctype=#{formEnctype} class="form-horizontal">
-  ^{formWidget}
-  <input type=submit>
+    <form method=get action=@{BookingsR gameId}#form enctype=#{formEnctype} class="form-horizontal">
+      ^{formWidget}
+      <input type=submit>
 
-<table width="80%">
-  <thead>
-    <th>Day
-    <th>Time
-    <th>Name
-    <th>Phone
-    <th>Email
-    <th>NumberOfPeople
-  <tbody>
-  $forall (timeslot, booking) <- bookedTimeslots
-    <tr>
-      <td>#{show (timeslotDay timeslot)}
-      <td>#{show (timeslotTime timeslot)}
-      <td>#{bookingName booking}
-      <td>#{bookingPhone booking}
-      <td>#{bookingEmail booking}
-      <td>#{bookingNumberOfPeople booking}
+    <table width="80%">
+      <thead>
+        <th>Day
+        <th>Time
+        <th>Name
+        <th>Phone
+        <th>Email
+        <th>NumberOfPeople
+        <th>Actions
+      <tbody>
+      $forall (Entity _ timeslot, Entity bookingId booking) <- bookedTimeslots
+        <tr>
+          <td>#{show (timeslotDay timeslot)}
+          <td>#{show (timeslotTime timeslot)}
+          <td>#{bookingName booking}
+          <td>#{bookingPhone booking}
+          <td>#{bookingEmail booking}
+          <td>#{bookingNumberOfPeople booking}
+          <td>
+            <button onclick="onDeleteClick(event, '@{BookingR bookingId}')">Delete
+

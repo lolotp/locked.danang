@@ -4,6 +4,8 @@
 /favicon.ico FaviconR GET
 /robots.txt RobotsR GET
 
-/                      HomeR    GET POST
-/games/#GameId         GameR    GET
-/bookings/#GameId      BookingsR GET POST
+/                            HomeR     GET POST
+/games/#GameId               GameR     GET
+/games/#GameId/bookings      BookingsR GET POST
+/bookings/#BookingId/delete  DeleteBookingR POST
+/bookings/#BookingId         BookingR DELETE
