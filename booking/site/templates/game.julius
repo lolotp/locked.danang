@@ -1,3 +1,14 @@
+function goToByScroll(id){
+        $('html,body').animate({scrollTop: $("#"+id).offset().top},'slow');
+}
+var hash = window.location.hash;
+
+$( document ).ready(function() {
+  setTimeout(function(){
+    goToByScroll(hash);
+  },200);
+}
+
 var timeslotFormInputId = "#{Text.Julius.rawJS bookingFormTimeslotFieldId}";
 
 function onTimeslotClick(e) {
