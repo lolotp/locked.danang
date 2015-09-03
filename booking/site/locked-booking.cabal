@@ -24,6 +24,7 @@ library
                      Handler.Home
                      Handler.Game
                      Handler.Booking
+                     PNotify
 
     if flag(dev) || flag(library-only)
         cpp-options:   -DDEVELOPMENT

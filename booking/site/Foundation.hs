@@ -7,12 +7,14 @@ import Text.Jasmine         (minifym)
 
 import Yesod.Default.Util   (addStaticContentExternal)
 import Yesod.Core.Types     (Logger)
-import qualified Yesod.Core.Unsafe as Unsafe
-
+import Yesod.Form.Jquery    (YesodJquery(..))
 import Yesod.Facebook
 import Yesod.Auth.Facebook.ServerSide
+import qualified Yesod.Core.Unsafe as Unsafe
 
 import Control.Monad.Trans.Maybe
+
+import PNotify              (YesodJqueryPnotify(..), pnotify)
 
 -- | The foundation datatype for your application. This can be a good place to
 -- keep settings and values requiring initialization before your application
@@ -176,6 +178,11 @@ instance YesodAuthPersist App
 -- achieve customized and internationalized form validation messages.
 instance RenderMessage App FormMessage where
     renderMessage _ _ = defaultFormMessage
+
+instance YesodJquery App where
+    urlJqueryJs _ = Right "//ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+
+instance YesodJqueryPnotify App
 
 unsafeHandler :: App -> Handler a -> IO a
 unsafeHandler = Unsafe.fakeHandlerGetLogger appLogger

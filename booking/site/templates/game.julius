@@ -1,5 +1,5 @@
 function goToByScroll(id){
-        $('html,body').animate({scrollTop: $("#"+id).offset().top},'slow');
+        $('html,body').animate({scrollTop: $(id).offset().top},'slow');
 }
 var hash = window.location.hash;
 

@@ -5,6 +5,7 @@ module Handler.Game where
 import Import
 import Yesod.Form.Bootstrap3 (BootstrapFormLayout (..), renderBootstrap3,
                               BootstrapGridOptions (..), withSmallInput)
+import Yesod.Form.Jquery     (YesodJquery(..))
 
 import Data.Time.LocalTime
 import Data.Time.Calendar
@@ -27,7 +28,8 @@ getGameR gameId = do
     (formWidget, formEnctype) <- generateFormPost bookingForm
 
     defaultLayout $ do
-        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+        master <- getYesod
+        addScriptEither $ urlJqueryJs master
         addScriptRemote "http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
         setTitle $ toHtml $ gameName game
         $(widgetFile "game")

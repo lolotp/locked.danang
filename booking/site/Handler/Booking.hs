@@ -5,12 +5,14 @@ module Handler.Booking where
 import Import
 import Yesod.Form.Bootstrap3 (BootstrapFormLayout (..), renderBootstrap3
                               , withSmallInput)
+import Yesod.Form.Jquery    (YesodJquery(..))
 
 import Data.Time.LocalTime
-
 import qualified Data.Text as T
 
+import PNotify               (setPNotify, PNotify(..), NotifyType(..), NotifyStyling(..))
 import Handler.Game (bookingForm)
+
 
 getBookingsR :: GameId -> Handler Html
 getBookingsR gameId = do
@@ -20,7 +22,8 @@ getBookingsR gameId = do
     bookedTimeslots <- runDB $ gameBookingsQuery gameId queryDay queryNumOfDay
 
     defaultLayout $ do
-        addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+        master <- getYesod
+        addScriptEither $ urlJqueryJs master
         setTitle "Bookings"
         $(widgetFile "bookings")
 
@@ -55,7 +58,11 @@ postBookingsR gameId = do
         FormFailure msg -> return $ Just $ T.concat msg
         FormMissing -> return $ Just "FormMissing"
     case newBookingError of
-        Just msg -> $(logError) msg
+        Just msg -> do
+            $(logError) msg
+            -- getI18NMessage <- getMessageRender
+            -- setMessage $ toHtml $  getI18NMessage MsgInvalidBookingData
+            setPNotify $ PNotify JqueryUI Error "Error" "Fail to add new booking"
         Nothing -> return ()
     redirect (GameR gameId)
 
@@ -63,5 +70,4 @@ timeDurationForm :: Day -> Form (Day, Integer)
 timeDurationForm defaultDay =
     renderBootstrap3 BootstrapBasicForm $ (,)
         <$> areq dayField (withSmallInput "Day") (Just defaultDay)
-        <*> areq intField (withSmallInput "Number of day") (Just 1)
-
+        <*> areq intField (withSmallInput "Number of day") (Just 1) 
