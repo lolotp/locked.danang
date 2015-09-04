@@ -5,7 +5,10 @@ var hash = window.location.hash;
 
 $( document ).ready(function() {
   setTimeout(function(){
-    goToByScroll(hash);
+    console.log('hash is ', hash);
+    if (hash) {
+      goToByScroll(hash);
+    }
   },200);
 });
 

@@ -9,6 +9,8 @@ config/client_session_key.aes
 cabal-dev/
 yesod-devel/
 .cabal-sandbox
+.stack-work
 cabal.sandbox.config
 .DS_Store
 *.swp
+.fb_secret

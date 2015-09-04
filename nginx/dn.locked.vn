@@ -35,6 +35,6 @@ server {
         proxy_pass http://localhost:3000/;
     }
 
-    #rewrite ^/favicon.ico$       http://hcm.locked.vn/misc/favicon.ico
+    rewrite ^/favicon.ico$       http://hcm.locked.vn/misc/favicon.ico;
 }
 
