@@ -55,8 +55,8 @@ customFieldSettings fs =
 
 rangeFieldSettings :: Int -> Int -> FieldSettings site -> FieldSettings site
 rangeFieldSettings minValue maxValue fs = 
-    let attrsWithMin = addAttr "min-disabled" (T.pack (show minValue)) (fsAttrs fs) in
-    let finalAttrs = addAttr "max-disabled" (T.pack (show maxValue)) attrsWithMin in
+    let attrsWithMin = addAttr "min" (T.pack (show minValue)) (fsAttrs fs) in
+    let finalAttrs = addAttr "max" (T.pack (show maxValue)) attrsWithMin in
     fs { fsAttrs = finalAttrs}
 
 bookingFormTimeslotFieldId :: Text

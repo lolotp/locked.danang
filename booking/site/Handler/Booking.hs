@@ -49,20 +49,19 @@ postBookingsR gameId = do
             runDB $ do
                 insertRes <- insertBy booking
                 case insertRes of
-                    Left _ -> return $ Just "Timeslot has already been booked!"
+                    Left _ -> return $ Just (MsgTimeslotBooked, "Timeslot has already been booked!")
                     Right _ -> return Nothing
             `catch` (\ (e :: SomeException)  -> do
                 $(logError) $ T.pack $ show e
-                return $ Just "Database error, please try again later"
+                return $ Just (MsgDatabaseError, "Database error, please try again later")
             )
-        FormFailure msg -> return $ Just $ T.concat msg
-        FormMissing -> return $ Just "FormMissing"
+        FormFailure msg -> return $ Just (MsgInvalidBookingData, T.concat msg)
+        FormMissing -> return $ Just (MsgFormMissing, "FormMissing")
     case newBookingError of
         Just msg -> do
-            $(logError) msg
-            -- getI18NMessage <- getMessageRender
-            -- setMessage $ toHtml $  getI18NMessage MsgInvalidBookingData
-            setPNotify $ PNotify JqueryUI Error "Error" "Fail to add new booking"
+            $(logError) $ snd msg
+            getI18NMessage <- getMessageRender
+            setPNotify $ PNotify JqueryUI Error (getI18NMessage MsgError) $ getI18NMessage $ fst msg
         Nothing -> return ()
     redirect (GameR gameId)
 
