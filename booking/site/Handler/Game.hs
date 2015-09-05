@@ -34,6 +34,17 @@ getGameR gameId = do
         setTitle $ toHtml $ gameName game
         $(widgetFile "game")
 
+resultsPerPage :: Int
+resultsPerPage = 10
+
+getGamesR :: Handler Html
+getGamesR = do
+    let pageNumber = 1
+    games <- runDB $ selectList ([] :: [Filter Game]) [LimitTo resultsPerPage, OffsetBy ((pageNumber - 1) * resultsPerPage)]
+    defaultLayout $ do
+        setTitle "Games"
+        $(widgetFile "games")
+
 ---------------------------------------------
 -- Form & form helpers
 ---------------------------------------------

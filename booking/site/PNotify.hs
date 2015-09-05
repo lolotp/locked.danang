@@ -19,7 +19,7 @@ import Yesod
 import Yesod.Form.Jquery
 
 import Data.Text (Text)
-import Data.Monoid ((<>), mempty)
+import Data.Monoid ((<>))
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
 import Control.Monad.Trans.Maybe
