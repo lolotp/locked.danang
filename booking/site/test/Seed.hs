@@ -18,15 +18,20 @@ pharaohDescription = "Cái chết nhanh chóng đến với kẻ nào dám xâm 
 sawDescription :: Text
 sawDescription = "Kẻ giết người hàng loạt JigSaw đã trở lại cùng với những cạm bẫy tra tấn khủng khiếp. Liệu rằng các nạn nhân tiếp theo có thể thoát khỏi sự độc ác của hắn."
 
+inceptionDescription :: Text
+inceptionDescription = "Một ngày nọ, thời gian tạo ra một cái bẫy. Bạn và các bạn của mình phát hiện ra tất cả đang bị khóa trong một mật thất không lối thoát. Tất cả phải cố gắng để cùng nhau thoát ra khỏi không gian vừa ảo vừa thật này. Hi vọng thoát thân nằm ở việc nắm giữ được không gian và thời gian. Nếu không, bạn và mọi người sẽ mãi bị giam cầm nơi đây…."
+
 games :: [Game]
 games =
     [ Game "Saw"      sawDescription 100 4 8 "http://dn.locked.vn/sites/default/files/styles/medium/public/image/thumb_saw.png"
     , Game "Pharaohs" pharaohDescription  80 4 8 "http://dn.locked.vn/sites/default/files/styles/medium/public/image/thumb_pharaohs.png"
+    , Game "Inception" inceptionDescription 70 3 6 "http://dn.locked.vn/files/inception/thumb.jpg"
     ]
 
 gamePreviewImages :: [[Text]]
 gamePreviewImages = [ ["http://dn.locked.vn/sites/default/files/styles/image_slide/public/image/saw_1.jpg","http://dn.locked.vn/sites/default/files/styles/image_slide/public/image/saw_2.jpg"]
                     , ["http://dn.locked.vn/sites/default/files/styles/image_slide/public/image/pha_7.jpg","http://hcm.locked.vn/sites/default/files/styles/image_slide/public/image/pha_8.jpg"]
+                    , ["http://dn.locked.vn/files/inception/slide_0.jpg","http://dn.locked.vn/files/inception/slide_1.jpg","http://dn.locked.vn/files/inception/slide_2.jpg"]
                     ]
 
 main :: IO ()
