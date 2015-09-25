@@ -1,5 +1,9 @@
 <div class="container">
   <div class="row">
-    The games are 
-    $forall Entity _ g <- games
-      <p>#{gameName g}
+    The games are
+    <br>
+    $forall Entity gameId game <- games
+      <a href="@{BookingsR gameId}">#{gameName game} page
+      <br>
+      <a href="@{GameR gameId}">#{gameName game} bookings page
+      <br>
