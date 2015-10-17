@@ -24,7 +24,7 @@ Timeslot
     game GameId
 Booking
     name  Text
-    email Text
+    email Text Maybe
     phone Int
     numberOfPeople Int
     timeslot TimeslotId

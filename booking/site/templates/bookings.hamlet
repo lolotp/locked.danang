@@ -22,7 +22,12 @@
           <td>#{show (timeslotTime timeslot)}
           <td>#{bookingName booking}
           <td>#{bookingPhone booking}
-          <td>#{bookingEmail booking}
+          <td>
+            $case (bookingEmail booking)
+              $of Nothing
+                None
+              $of Just emailText
+                #{emailText}
           <td>#{bookingNumberOfPeople booking}
           <td>
             <button onclick="onDeleteClick(event, '@{BookingR bookingId}')">Delete

@@ -27,12 +27,12 @@ share [mkPersist sqlSettings, mkMigrate "migrateAll"]
 ---------------------------------------------
 
 timeslotsPerDay :: [TimeOfDay]
-timeslotsPerDay = 
+timeslotsPerDay =
     let f h m = TimeOfDay h m 0 in
     [f 9 0, f 10 30, f 12 0, f 13 15, f 14 45, f 16 15, f 17 45, f 19 15, f 20 45]
 
 timeslotsFromDay :: Day -> Int -> [(Day, TimeOfDay)]
-timeslotsFromDay startDate numWeeks = 
+timeslotsFromDay startDate numWeeks =
   let dayList = map (\numDays -> addDays (toInteger numDays) startDate) [0..numWeeks*7-1] in
   [(day, time) | day <- dayList, time <- timeslotsPerDay]
 
@@ -98,7 +98,7 @@ findAndDeleteBookingQuery bookingId = do
     return (mbGame, nDelete)
 
 timeslotBookingMapFromList :: [TimeslotBooking] -> Data.Map.Strict.Map (Day,TimeOfDay) (TimeslotId, (Maybe BookingId))
-timeslotBookingMapFromList list = 
+timeslotBookingMapFromList list =
     Data.Map.fromList
         [((day, time), (timeslotId, bookingId)) | (E.Value day,E.Value time,E.Value timeslotId, E.Value bookingId) <- list]
 

@@ -13,6 +13,7 @@ import Data.Maybe (fromJust)
 
 import qualified Data.Text as T
 import qualified Data.Map  as DM
+import qualified Data.Set as DS
 
 import Text.Julius (rawJS)
 
@@ -26,7 +27,7 @@ getGameR gameId = do
     previewImages <- runDB $ selectList [PreviewImageGame ==. gameId] []
     let days = map (\num -> addDays num (localDay currentTime)) [0..numDaysInAdvance-1]
     (formWidget, formEnctype) <- generateFormPost bookingForm
-
+    let allDaysTimeslots = DS.fromList [daySlot | ((_, daySlot), _)<- (DM.toList timeslots)]
     defaultLayout $ do
         master <- getYesod
         addScriptEither $ urlJqueryJs master
@@ -78,7 +79,7 @@ bookingForm =
     let formLayout = BootstrapHorizontalForm (ColLg 0) (ColLg 3) (ColLg 0) (ColLg 9) in
     renderBootstrap3 formLayout $ Booking
         <$> areq textField (customFieldSettings (fieldSettingsLabel MsgName)) Nothing
-        <*> areq emailField (customFieldSettings (fieldSettingsLabel MsgEmail)) Nothing
+        <*> aopt emailField (customFieldSettings (fieldSettingsLabel MsgEmail)) Nothing
         <*> areq intField (customFieldSettings (fieldSettingsLabel MsgPhone)) Nothing
         <*> areq nPeopleField (rangeFieldSettings 1 20 (customFieldSettings (fieldSettingsLabel MsgNumberOfPeople))) Nothing
         <*> areq hiddenField (FieldSettings "" Nothing (Just bookingFormTimeslotFieldId) Nothing []) Nothing

@@ -48,7 +48,7 @@ main = do
         runMigrationUnsafe migrateAll
         zipWithM_ insertGameAndImages games gamePreviewImages
         games <- selectList ([] :: [Filter Game]) []
-        mapM_ 
-            (\game -> mapM_ (insertTimeslot (entityKey game)) $ timeslotsFromDay (fromGregorian 2015 09 27) 52) 
+        mapM_
+            (\game -> mapM_ (insertTimeslot (entityKey game)) $ timeslotsFromDay (fromGregorian 2015 09 27) 52)
             games
 

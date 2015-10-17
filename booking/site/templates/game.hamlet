@@ -39,7 +39,7 @@
       $forall _ <- take 7 days
         <col style="width:14%">
       <tbody>
-      $forall perDaySlot <- timeslotsPerDay
+      $forall perDaySlot <- allDaysTimeslots
         <tr>
         $forall day <- take 7 days
           <td>
