@@ -49,6 +49,6 @@ main = do
         zipWithM_ insertGameAndImages games gamePreviewImages
         games <- selectList ([] :: [Filter Game]) []
         mapM_
-            (\game -> mapM_ (insertTimeslot (entityKey game)) $ timeslotsFromDay (fromGregorian 2015 09 27) 52)
+            (\game -> mapM_ (insertTimeslot (entityKey game)) $ timeslotsFromDay (fromGregorian 2015 10 17) 52)
             games
 

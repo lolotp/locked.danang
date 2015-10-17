@@ -4,6 +4,7 @@ import ClassyPrelude.Yesod
 import Database.Persist.Quasi
 import Data.Time.LocalTime
 import Data.Time.Calendar
+import Data.Time.Calendar.WeekDate
 import Data.Map.Strict (Map)
 import Data.Map (fromList)
 import Data.List (head)
@@ -26,15 +27,22 @@ share [mkPersist sqlSettings, mkMigrate "migrateAll"]
 -- Application data constants
 ---------------------------------------------
 
-timeslotsPerDay :: [TimeOfDay]
-timeslotsPerDay =
+timeslotsPerDay :: Day -> [TimeOfDay]
+timeslotsPerDay day =
+    let (_, _, weekDate) = toWeekDate day in
     let f h m = TimeOfDay h m 0 in
-    [f 9 0, f 10 30, f 12 0, f 13 15, f 14 45, f 16 15, f 17 45, f 19 15, f 20 45]
+    let weekDaySlots = [f 08 15, f 09 30, f 10 45, f 13 30, f 14 45, f 16 00, f 17 15, f 20 45, f 18 30, f 19 45] in
+    let weekEndSlots = [f 08 15, f 09 30, f 10 45, f 12 00, f 13 30, f 14 45, f 16 00, f 17 15, f 20 45, f 18 30, f 19 45, f 21 00] in
+    case weekDate of
+        6 -> weekEndSlots
+        7 -> weekEndSlots
+        _ -> weekDaySlots
 
 timeslotsFromDay :: Day -> Int -> [(Day, TimeOfDay)]
 timeslotsFromDay startDate numWeeks =
   let dayList = map (\numDays -> addDays (toInteger numDays) startDate) [0..numWeeks*7-1] in
-  [(day, time) | day <- dayList, time <- timeslotsPerDay]
+  [(day, time) | day <- dayList, time <- timeslotsPerDay day]
+  -- [(day, time) | day <- dayList, time <- timeslotsPerDay]
 
 insertTimeslot :: MonadIO m => GameId -> (Day, TimeOfDay) -> ReaderT SqlBackend m ()
 insertTimeslot gameId (day, time) =
@@ -68,7 +76,7 @@ availableGameTimeslotsBookingQuery gameId currentTime = E.select
                   E.&&.(timeslot ^. TimeslotTime E.>.  E.val (localTimeOfDay currentTime))
                   )
              )
-    E.limit $ fromIntegral $ numDaysInAdvance * (toInteger.length) timeslotsPerDay
+    E.limit $ fromIntegral $ numDaysInAdvance * (toInteger.length) (timeslotsPerDay (fromGregorian 2015 10 17))
     return
         ( timeslot ^. TimeslotDay
         , timeslot ^. TimeslotTime
